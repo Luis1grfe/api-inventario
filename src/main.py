@@ -2,13 +2,13 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import os
-from flask import Flask, request, jsonify, url_for
+from flask import Flask, request, jsonify, url_for,json
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User
+from models import db, User, Product
 #from models import Person
 
 app = Flask(__name__)
@@ -38,6 +38,27 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+# All products list
+@app.route('/list', methods=['GET'])
+def handle_list():
+
+    list_query = Product.query.all()
+    all_product = list(map(lambda x: x.serialize(), list_query))
+
+    return jsonify(all_product), 200
+
+#Product insert in database
+@app.route('/add', methods=['POST'])
+def handle_add():
+    decoded_object = json.loads(request.data)
+    new_product = Product(sku=decoded_object["sku"], name=decoded_object["name"], paleta=decoded_object["paleta"], cantidaddebotellas=decoded_object["cantidaddebotellas"])
+    db.session.add(new_product)
+    db.session.commit()
+
+    return jsonify(new_product.serialize()), 200
+
+#Product delete
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
