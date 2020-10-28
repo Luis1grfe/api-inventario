@@ -59,6 +59,34 @@ def handle_add():
     return jsonify(new_product.serialize()), 200
 
 #Product delete
+@app.route('/delete/<int:product_id>', methods=['DELETE'])
+def handle_delete(product_id):
+    product_delete = Product.query.get(product_id)
+    if product_delete is None:
+        raise APIException('Product not found', status_code=404)
+    db.session.delete(product_delete)
+    db.session.commit()
+
+    return '',204
+
+#Product Mod
+@app.route('/mod/<int:product_id>', methods=['PUT'])
+def handle_mod(product_id):
+    body = json.loads(request.data)
+    product_mod = Product.query.get(product_id)
+    if product_mod is None:
+        raise APIException('User not found', status_code=404)
+    if "sku" in body:
+        product_mod.sku = body["sku"]
+    if "name" in body:
+        product_mod.name = body["name"]
+    if "paleta" in body:
+        product_mod.paleta = body["paleta"]
+    if "cantidaddebotellas" in body:
+        product_mod.cantidaddebotellas = body["cantidaddebotellas"]
+    db.session.commit()
+
+    return jsonify(product_mod.serialize()), 200
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
