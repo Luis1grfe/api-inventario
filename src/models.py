@@ -4,12 +4,12 @@ db = SQLAlchemy()
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(120), unique=True, nullable=False)
-    apellido = db.Column(db.String(120), unique=True, nullable=False)
-    empresa = db.Column(db.String(120), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    telefono = db.Column(db.String(12), unique=True, nullable=False)
-    datos = db.Column(db.String(1000), unique=True, nullable=False)
+    nombre = db.Column(db.String(120), unique=False, nullable=False)
+    apellido = db.Column(db.String(120), unique=False, nullable=False)
+    empresa = db.Column(db.String(120), unique=False, nullable=False)
+    email = db.Column(db.String(120), unique=False, nullable=False)
+    telefono = db.Column(db.String(12), unique=False, nullable=False)
+    datos = db.Column(db.Text, unique=False, nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.username

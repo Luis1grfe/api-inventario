@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User, Product
+from models import db, User, Product, Inventario
 #from models import Person
 
 app = Flask(__name__)
@@ -156,7 +156,7 @@ def handle_adduser():
 
 #USer delete
 @app.route('/deleteuser/<int:user_id>', methods=['DELETE'])
-def handle_deleteinventario(user_id):
+def handle_deleteuser(user_id):
     user_delete = User.query.get(user_id)
     if user_delete is None:
         raise APIException('User not found', status_code=404)
